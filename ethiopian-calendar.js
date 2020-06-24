@@ -6,9 +6,6 @@ import support from 'enketo-core/src/js/support';
  */
 class EthiopianCalendar extends Widget {
 
-    daysPerMonth = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 5];
-    monthNames = ['Meskerem', 'Tikemet', 'Hidar', 'Tahesas', 'Tir', 'Yekatit',
-        'Megabit', 'Miazia', 'Genbot', 'Sene', 'Hamle', 'Nehase', 'Pagume'];
     /**
      * @type {string}
      */
@@ -30,6 +27,9 @@ class EthiopianCalendar extends Widget {
         this.$yearInput = this._createYearInput();
         this.ethiopianDate = require('ethiopian-date');
         this.element.classList.add('hide');
+        this.daysPerMonth = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 5];
+        this.monthNames = ['Meskerem', 'Tikemet', 'Hidar', 'Tahesas', 'Tir', 'Yekatit',
+            'Megabit', 'Miazia', 'Genbot', 'Sene', 'Hamle', 'Nehase', 'Pagume'];
         const widget = this.question.querySelector( '.widget' );
         widget.append(this.$dayInput);
         widget.append(this.$monthInput);
