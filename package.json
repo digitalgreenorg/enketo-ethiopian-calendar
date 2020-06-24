@@ -1,0 +1,28 @@
+{
+    "name": "enketo-ethiopian-calendar-widget",
+    "description": "Enketo widget to show ethiopian dates",
+    "homepage": "https://digitalgreen.org",
+    "version": "1.0.0",
+    "main": "./ethiopian-calendar.js",
+    "keywords": [
+        "enketo"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/digitalgreenorg/enketo-ethiopian-calendar-widget"
+    },
+    "bugs": "https://github.com/digitalgreenorg/enketo-ethiopian-calendar-widget/issues",
+    "author": {
+        "name": "Mayank Gautam",
+        "email": "mayank@digitalgreen.org",
+        "url": "https://www.linkedin.com/in/mgautam99"
+    },
+    "contributors": [],
+    "private": true,
+    "license": "Apache-2.0",
+    "dependencies": {
+        "enketo-core": "5.x.x",
+        "ethiopian-date": "^0.0.6",
+        "bootstrap-select": "1.13.17"
+    }
+}
