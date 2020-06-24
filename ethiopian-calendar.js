@@ -1,5 +1,4 @@
 import Widget from 'enketo-core/src/js/widget';
-import $ from 'jquery';
 import support from 'enketo-core/src/js/support';
 
 /**
@@ -7,9 +6,9 @@ import support from 'enketo-core/src/js/support';
  */
 class EthiopianCalendar extends Widget {
 
-    daysPerMonth = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 5]
+    daysPerMonth = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 5];
     monthNames = ['Meskerem', 'Tikemet', 'Hidar', 'Tahesas', 'Tir', 'Yekatit',
-        'Megabit', 'Miazia', 'Genbot', 'Sene', 'Hamle', 'Nehase', 'Pagume']
+        'Megabit', 'Miazia', 'Genbot', 'Sene', 'Hamle', 'Nehase', 'Pagume'];
     /**
      * @type {string}
      */
@@ -29,8 +28,8 @@ class EthiopianCalendar extends Widget {
         this.$dayInput = this._createDayInput();
         this.$monthInput = this._createMonthInput();
         this.$yearInput = this._createYearInput();
-        this.ethiopianDate = require('ethiopian-date')
-        this.element.classList.add('hide')
+        this.ethiopianDate = require('ethiopian-date');
+        this.element.classList.add('hide');
         const widget = this.question.querySelector( '.widget' );
         widget.append(this.$dayInput);
         widget.append(this.$monthInput);
@@ -39,27 +38,27 @@ class EthiopianCalendar extends Widget {
 
     _createDayInput(){
         let arr = new Array(30);
-        arr = [arr.map((element, index) => index+1)]
-        const list= this._getListHtml(arr, -1)
-        const template = this._getTemplate(list)
-        return template
+        arr = [arr.map((element, index) => index+1)];
+        const list= this._getListHtml(arr, -1);
+        const template = this._getTemplate(list);
+        return template;
     }
 
     _createMonthInput(){
-        const list= this._getListHtml(this.monthNames, -1)
-        const template = this._getTemplate(list)
-        return template
+        const list= this._getListHtml(this.monthNames, -1);
+        const template = this._getTemplate(list);
+        return template;
     }
 
     _createYearInput(){
-        const currentYear = this.ethiopianDate.toEthiopian(2020, 6, 23)[0]
-        let arr = new Array(100)
+        const currentYear = this.ethiopianDate.toEthiopian(2020, 6, 23)[0];
+        let arr = new Array(100);
         for(var i=99; i>=0; i--){
             arr[i]=currentYear-i;
         }
-        const list= this._getListHtml(arr, -1)
-        const template = this._getTemplate(list)
-        return template
+        const list= this._getListHtml(arr, -1);
+        const template = this._getTemplate(list);
+        return template;
     }
 
     _getTemplate(list){
