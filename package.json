@@ -2,7 +2,7 @@
     "name": "enketo-ethiopian-calendar-widget",
     "description": "Enketo widget to show ethiopian dates",
     "homepage": "https://digitalgreen.org",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "main": "./ethiopian-calendar.js",
     "keywords": [
         "enketo"
