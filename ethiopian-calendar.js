@@ -1,5 +1,6 @@
 import Widget from 'enketo-core/src/js/widget';
 import support from 'enketo-core/src/js/support';
+import toEthiopian from 'ethiopian-date';
 
 /**
  * Calendar widget to take ethiopian dates
@@ -29,7 +30,6 @@ class EthiopianCalendar extends Widget {
         this.$dayInput = this._createDayInput();
         this.$monthInput = this._createMonthInput();
         this.$yearInput = this._createYearInput();
-        this.ethiopianDate = require('ethiopian-date');
         this.element.classList.add('hide');
         this.element.after( document.createRange().createContextualFragment( '<div class="ethiopian-calendar widget" />' ) );
         const widget = this.question.querySelector( '.widget' );
@@ -53,7 +53,7 @@ class EthiopianCalendar extends Widget {
     }
 
     _createYearInput(){
-        const currentYear = this.ethiopianDate.toEthiopian(2020, 6, 23)[0];
+        const currentYear = toEthiopian(2020, 6, 23)[0];
         let arr = new Array(100);
         for(var i=99; i>=0; i--){
             arr[i]=currentYear-i;
