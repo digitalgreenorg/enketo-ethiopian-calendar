@@ -22,14 +22,16 @@ class EthiopianCalendar extends Widget {
     }
 
     _init(){
+        this.daysPerMonth = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 5];
+        this.monthNames = ['Meskerem', 'Tikemet', 'Hidar', 'Tahesas', 'Tir', 'Yekatit',
+            'Megabit', 'Miazia', 'Genbot', 'Sene', 'Hamle', 'Nehase', 'Pagume'];
+
         this.$dayInput = this._createDayInput();
         this.$monthInput = this._createMonthInput();
         this.$yearInput = this._createYearInput();
         this.ethiopianDate = require('ethiopian-date');
         this.element.classList.add('hide');
-        this.daysPerMonth = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 5];
-        this.monthNames = ['Meskerem', 'Tikemet', 'Hidar', 'Tahesas', 'Tir', 'Yekatit',
-            'Megabit', 'Miazia', 'Genbot', 'Sene', 'Hamle', 'Nehase', 'Pagume'];
+        this.element.after( document.createRange().createContextualFragment( '<div class="ethiopian-calendar widget" />' ) );
         const widget = this.question.querySelector( '.widget' );
         widget.append(this.$dayInput);
         widget.append(this.$monthInput);
