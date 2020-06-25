@@ -62,7 +62,7 @@ class EthiopianCalendar extends Widget {
     }
 
     _getTemplate(list){
-        const template = range.createContextualFragment( `
+        const template = document.createRange().createContextualFragment( `
         <select class="selectpicker">
             ${this._getListHtml(list)}
         </select>
