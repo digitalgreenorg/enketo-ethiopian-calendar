@@ -213,7 +213,7 @@ var startDayOfEthiopian = function startDayOfEthiopian(year) {
     return (year - 1) % 4 === 3 ? newYearDay + 1 : newYearDay;
 };
 
-var toGregorian = exports.toGregorian = function toGregorian(dateArray) {
+var toGregorian = function toGregorian(dateArray) {
     // Allow argument to be array year, month, day, or 3 separate params
     var inputs = dateArray.constructor === Array ? dateArray : [].slice.call(arguments);
 
@@ -287,7 +287,7 @@ var toGregorian = exports.toGregorian = function toGregorian(dateArray) {
     return [gregorianYear, gregorianMonths, gregorianDate];
 };
 
-var toEthiopian = exports.toEthiopian = function toEthiopian(dateArray) {
+var toEthiopian = function toEthiopian(dateArray) {
     // Allow argument to be array year, month, day, or 3 separate params
     var inputs = dateArray.constructor === Array ? dateArray : [].slice.call(arguments);
 
