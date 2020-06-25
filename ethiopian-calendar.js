@@ -11,7 +11,7 @@ class EthiopianCalendar extends Widget {
      */
 
     static get selector() {
-        return '.question input[type="ethiopian-date"]';
+        return '.or-appearance-ethiopian-date input[type="text"]';
     }
 
     /**
