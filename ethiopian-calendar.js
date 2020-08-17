@@ -39,7 +39,7 @@ class EthiopianCalendar extends Widget {
 
     _createDayInput(){
         let arr = new Array(30);
-        arr = [arr.map((element, index) => index+1)];
+        arr = Array.apply(1, arr).map((element, index) => (index+1));
         const list= this._getListHtml(arr, -1);
         const template = this._getTemplate(list);
         return template;
@@ -65,7 +65,7 @@ class EthiopianCalendar extends Widget {
     _getTemplate(list){
         const template = document.createRange().createContextualFragment( `
         <select class="selectpicker">
-            ${this._getListHtml(list)}
+            ${list}
         </select>
         `);
         // this._showSelected( template.querySelector( '.selected' ) );
