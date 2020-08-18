@@ -33,20 +33,29 @@ class EthiopianCalendar extends Widget {
         this.dateArr = ['0','0','0']
 
         this.element.classList.add('hide');
-        this.element.after( document.createRange().createContextualFragment( '<div class="ethiopian-calendar widget" style="display: flex;" />' ) );
 
         //Create widget's DOM function
-        const widget = this.question.querySelector( '.widget' );
-        // this.dateInput = this.question.querySelector( 'input' );
+        const fragment = document.createRange().createContextualFragment(
+            '<div class="ethiopian-calendar widget" style="display: flex;" />'
+        )
         this.$dayInput = this._createDayInput();
         this.$monthInput = this._createMonthInput();
         this.$yearInput = this._createYearInput();
-        widget.append(this.$dayInput);
-        widget.append(this.$monthInput);
-        widget.append(this.$yearInput);
-        this.$dayInput.addEventListener('change', this._change.bind(this))
-        this.$monthInput.addEventListener('change', this._change.bind(this))
-        this.$yearInput.addEventListener('change', this._change.bind(this))
+        fragment.appendChild(this.$dayInput);
+        fragment.appendChild(this.$monthInput);
+        fragment.appendChild(this.$yearInput);
+
+        this.element.after(fragment);
+
+        const widget = this.element.parentElement.querySelector('.widget')
+        // this.$dayInput = this.question.querySelector( 'input' );
+        ["day","month","year"].forEach((value) => {
+            widget.querySelector('#'+value).addEventListener('change', this._change.bind(this))
+        })
+
+        // this.$dayInput.addEventListener('change', this._change.bind(this))
+        // this.$monthInput.addEventListener('change', this._change.bind(this))
+        // this.$yearInput.addEventListener('change', this._change.bind(this))
         this.value = this.originalInputValue;
     }
 
@@ -91,7 +100,7 @@ class EthiopianCalendar extends Widget {
         console.log("onChange: start" + this.originalInputValue)
         // propagate value changes to original input and make sure a change event is fired
         let index = {"day": 0, "month": 1, "year": 2}[template.id]
-        this.dateArr[index] = e.target.value
+        this.dateArr[index] = ev.target.value
         // this.dateInput.value = this.dateArr.reduce((prev, curr) => p+"/"+c)
         this.originalInputValue = this.dateArr.reduce((prev, curr) => p+"/"+c)
         console.log("onChange: " + this.originalInputValue)
