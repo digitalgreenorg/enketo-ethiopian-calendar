@@ -7,99 +7,251 @@ import support from 'enketo-core/src/js/support';
 class EthiopianCalendar extends Widget {
 
     /**
-     * The selector that determines on which form control the widget is instantiated.
-     * Make sure that any other widgets that target the same from control are not interfering with this widget by disabling
-     * the other widget or making them complementary.
-     * This function is always required.
+     * @type {string}
      */
+
     static get selector() {
         return '.or-appearance-ethiopian-date input[type="text"]';
     }
 
-    /**
-     * Initialize the widget that has been instantiated using the Widget (super) constructor.
-     * The _init function is called by that super constructor unless that constructor is overridden.
-     * This function is always required.
-     */
-    _init() {
-        // Hide the original input
-        this.element.classList.add( 'hide' );
-
-        // Create the widget's DOM fragment.
-        const fragment = document.createRange().createContextualFragment(
-            `<div class="widget">
-                <input class="ignore" type="range" min="0" max="100" step="1"/>
-            </div>`
-        );
-        fragment.querySelector( '.widget' ).appendChild( this.resetButtonHtml );
-
-        // Only when the new DOM has been fully created as a HTML fragment, we append it.
-        this.element.after( fragment );
-
-        const widget = this.element.parentElement.querySelector( '.widget' );
-        this.range = widget.querySelector( 'input' );
-
-        // Set the current loaded value into the widget
-        this.value = this.originalInputValue;
-
-        // Set event handlers for the widget
-        this.range.addEventListener( 'change', this._change.bind( this ) );
-        widget.querySelector( '.btn-reset' ).addEventListener( 'click', this._reset.bind( this ) );
-
-        // This widget initializes synchronously so we don't return anything.
-        // If the widget initializes asynchronously return a promise that resolves to `this`.
+    static get name() {
+        return "ethiopian-calendar"
     }
 
-    _reset() {
-        this.value = '';
-        this.originalInputValue = '';
-        this.element.classList.add( 'empty' );
+    /**
+     * @return {boolean} Whether additional condition to instantiate the widget is met.
+     */
+    static condition() {
+        return !support.touch;
+    }
+
+    _init(){
+        this.daysPerMonth = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 5];
+        this.monthNames = ['Meskerem', 'Tikemet', 'Hidar', 'Tahesas', 'Tir', 'Yekatit',
+            'Megabit', 'Miazia', 'Genbot', 'Sene', 'Hamle', 'Nehase', 'Pagume'];
+
+        this.dateArr = ['0','0','0']
+
+        this.element.classList.add('hide');
+        this.element.after( document.createRange().createContextualFragment( '<div class="ethiopian-calendar widget" style="display: flex;" />' ) );
+
+        //Create widget's DOM function
+        const widget = this.question.querySelector( '.widget' );
+        // this.dateInput = this.question.querySelector( 'input' );
+        this.$dayInput = this._createDayInput();
+        this.$monthInput = this._createMonthInput();
+        this.$yearInput = this._createYearInput();
+        widget.append(this.$dayInput);
+        widget.append(this.$monthInput);
+        widget.append(this.$yearInput);
+        this.$dayInput.addEventListener('change', this._change.bind(this))
+        this.$monthInput.addEventListener('change', this._change.bind(this))
+        this.$yearInput.addEventListener('change', this._change.bind(this))
+        this.value = this.originalInputValue;
+    }
+
+    _createDayInput(){
+        let arr = new Array(30);
+        arr = Array.apply(1, arr).map((element, index) => (index+1));
+        const list= this._getListHtml(arr, -1);
+        const template = this._getTemplate(list, "day");
+        return template;
+    }
+
+    _createMonthInput(){
+        const list= this._getListHtml(this.monthNames, -1);
+        const template = this._getTemplate(list, "month");
+        return template;
+    }
+
+    _createYearInput(){
+        const currentYear = toEthiopian(2020, 6, 23)[0];
+        let arr = new Array(100);
+        for(var i=99; i>=0; i--){
+            arr[i]=currentYear-i;
+        }
+        const list= this._getListHtml(arr, -1);
+        const template = this._getTemplate(list, "year");
+        return template;
+    }
+
+    _getTemplate(list, id){
+        const template = document.createRange().createContextualFragment( `
+        <select class="selectpicker" id="${id}">
+            ${list}
+        </select>
+        `);
+        // this._showSelected( template.querySelector( '.selected' ) );
+        // template.addEventListener('change', this._change.bind(this))
+        // this._addOnChangeListener(template)
+        return template;
     }
 
     _change( ev ) {
+        console.log("onChange: start" + this.originalInputValue)
         // propagate value changes to original input and make sure a change event is fired
-        this.originalInputValue = ev.target.value;
-        this.element.classList.remove( 'empty' );
+        let index = {"day": 0, "month": 1, "year": 2}[template.id]
+        this.dateArr[index] = e.target.value
+        // this.dateInput.value = this.dateArr.reduce((prev, curr) => p+"/"+c)
+        this.originalInputValue = this.dateArr.reduce((prev, curr) => p+"/"+c)
+        console.log("onChange: " + this.originalInputValue)
+    }
+
+    _addOnChangeListener(template){
+        template.addEventListener('change', (e) => {
+
+        });
+    }
+
+    _getListHtml(list){
+        return list.map(element => `<option>${element}</option>`);
     }
 
     /**
-     * Disallow user input into widget by making it readonly.
+     * @type {string}
      */
-    disable() {
-        this.range.disabled = true;
+    get displayedValue() {
+        return this.originalInputValue;
     }
 
-    /**
-     * Performs opposite action of disable() function.
-     */
-    enable() {
-        this.range.disabled = false;
-    }
-
-    /**
-     * Update the language, list of options and value of the widget.
-     */
     update() {
-        this.value = this.originalInputValue;
+        // super.update();
+        this.value = this.originalInputValue
     }
 
-    /**
-     * Obtain the current value from the widget. Usually required.
-     *
-     * @type {*}
-     */
     get value() {
-        return this.element.classList.contains( 'empty' ) ? '' : this.range.value;
+        console.log("get: "+this.originalInputValue)
+        return this.originalInputValue
     }
 
-    /**
-     * Set a value in the widget. Usually required.
-     *
-     * @param {*} value - value to set
-     */
-    set value( value ) {
-        this.range.value = value;
+    set value(value) {
+        let arr = value.split("/")
+        if(arr.length === 3){
+            this.dateArr = arr
+            this.$dayInput.value = this.dateArr[0]
+            this.$monthInput.value = this.dateArr[1]
+            this.$yearInput.value = this.dateArr[2]
+            this.originalInputValue = value
+        }
     }
+
+    // _getListHtml(options, selectedIndex ) {
+    //     const inputAttr = `type="radio" name="${Math.random() * 100000}"`;
+    //     return options
+    //         .map( (option, i) => {
+    //             const label = option;
+    //             const selected = i === selectedIndex;
+    //             const value = option;
+    //             if ( value ) {
+    //                 const checkedInputAttr = selected ? ' checked="checked"' : '';
+    //                 const checkedLiAttr = selected ? 'class="active"' : '';
+    //                 /**
+    //                  * e.g.:
+    //                  * <li checked="checked">
+    //                  *   <a class="option-wrapper" tabindex="-1" href="#">
+    //                  *         <label>
+    //                  *           <input class="ignore" type="checkbox" checked="checked" value="a"/>
+    //                  *         </label>
+    //                  *       </a>
+    //                  *    </li>
+    //                  */
+    //                 return `
+    //                     <li ${checkedLiAttr}>
+    //                         <a class="option-wrapper" tabindex="-1" href="#">
+    //                             <label>
+    //                                 <input class="ignore" ${inputAttr}${checkedInputAttr} value="${value}" />
+    //                                 <span class="option-label">${label}</span>
+    //                             </label>
+    //                         </a>
+    //                     </li>`;
+    //             } else {
+    //                 return '';
+    //             }
+    //         } ).join( '' );
+    // }
+    //
+    // /**
+    //
+    //  * Handles click listener
+    //
+    //  */
+    //
+    // _clickListener(element) {
+    //     const _this = this;
+    //     $( element )
+    //         .on( 'click', 'li:not(.disabled)', function( e ) {
+    //             const li = this;
+    //             const input = li.querySelector( 'input' );
+    //             const select = _this.element;
+    //             const option = select.querySelector( `option[value="${input.value}"]` );
+    //             const selectedBefore = option.matches( ':checked' );
+    //             // We need to prevent default unless click was on an input
+    //             // Without this 'fix', clicks on radiobuttons/checkboxes themselves will update the value
+    //             // but will not show checked status.
+    //             if ( e.target.nodeName.toLowerCase() !== 'input' ) {
+    //                 e.preventDefault();
+    //             }
+    //             element.querySelectorAll( 'li' ).forEach( li=> li.classList.remove( 'active' ) );
+    //             getSiblingElementsAndSelf( option, 'option' ).forEach( option => { option.selected = false; } );
+    //             element.querySelectorAll( 'input' ).forEach( input  => input.checked = false );
+    //
+    //             // For issue https://github.com/kobotoolbox/enketo-express/issues/1122 in FF,
+    //             // we had to use event.preventDefault() on <a> tag click events.
+    //             // This broke view updates when clicking on the radiobuttons and checkboxes directly
+    //             // although the underlying values did change correctly.
+    //             //
+    //             // It has to do with event propagation. I could not figure out how to fix it.
+    //             // Therefore I used a workaround by slightly delaying the status changes.
+    //             setTimeout( () => {
+    //                 if ( selectedBefore ) {
+    //                     li.classList.remove( 'active' );
+    //                     input.checked = false;
+    //                     option.selected = false;
+    //                 } else {
+    //                     li.classList.add( 'active' );
+    //                     option.selected = true;
+    //                     input.checked = true;
+    //                 }
+    //                 const showSelectedEl = element.querySelector( '.selected' );
+    //                 _this._showSelected( showSelectedEl );
+    //                 select.dispatchEvent( new event.Change() );
+    //             }, 10 );
+    //         } )
+    //         .on( 'keydown', 'li:not(.disabled)', e => {
+    //             const keyCode = e.keyCode.toString( 10 );
+    //             // Enter/Space keys
+    //             if ( /(13|32)/.test( keyCode ) ) {
+    //                 if ( !/(32)/.test( keyCode ) ) {
+    //                     e.preventDefault();
+    //                 }
+    //                 const elem = $( ':focus' );
+    //                 elem.click();
+    //                 // Prevent screen from scrolling if the user hit the spacebar
+    //                 e.preventDefault();
+    //             }
+    //         } )
+    //         .on( 'click', 'li.disabled', e => {
+    //             e.stopPropagation();
+    //             return false;
+    //         } )
+    //         .on( 'click', 'a', e => {
+    //             // Prevent FF from adding empty anchor to URL if checkbox or radiobutton is clicked.
+    //             // https://github.com/kobotoolbox/enketo-express/issues/1122
+    //             e.preventDefault();
+    //         } );
+    // }
+
+    /**
+     * Handles focus listener
+     */
+
+    // _focusListener() {
+    //     const _this = this;
+    //     // Focus on original element (form.goTo functionality)
+    //     this.element.addEventListener( events.ApplyFocus().type, () => {
+    //         _this.picker.querySelector( '.dropdown-toggle' ).focus();
+    //     } );
+    // }
 
 }
 
