@@ -14,6 +14,10 @@ class EthiopianCalendar extends Widget {
         return '.or-appearance-ethiopian-date input[type="text"]';
     }
 
+    static get name() {
+        return "ethiopian-calendar"
+    }
+
     /**
      * @return {boolean} Whether additional condition to instantiate the widget is met.
      */
@@ -30,8 +34,10 @@ class EthiopianCalendar extends Widget {
 
         this.element.classList.add('hide');
         this.element.after( document.createRange().createContextualFragment( '<div class="ethiopian-calendar widget" style="display: flex;" />' ) );
+
+        //Create widget's DOM function
         const widget = this.question.querySelector( '.widget' );
-        this.dateInput = this.question.querySelector( 'input' );
+        // this.dateInput = this.question.querySelector( 'input' );
         this.$dayInput = this._createDayInput();
         this.$monthInput = this._createMonthInput();
         this.$yearInput = this._createYearInput();
@@ -73,17 +79,23 @@ class EthiopianCalendar extends Widget {
         </select>
         `);
         // this._showSelected( template.querySelector( '.selected' ) );
+        template.addEventListener('change', this._change.bind(this))
         this._addOnChangeListener(template)
         return template;
     }
 
+    _change( ev ) {
+        // propagate value changes to original input and make sure a change event is fired
+        let index = {"day": 0, "month": 1, "year": 2}[template.id]
+        this.dateArr[index] = e.target.value
+        // this.dateInput.value = this.dateArr.reduce((prev, curr) => p+"/"+c)
+        this.originalInputValue = this.dateArr.reduce((prev, curr) => p+"/"+c)
+        console.log("onChange: " + this.originalInputValue)
+    }
+
     _addOnChangeListener(template){
         template.addEventListener('change', (e) => {
-            let index = {"day": 0, "month": 1, "year": 2}[template.id]
-            this.dateArr[index] = e.target.value
-            this.dateInput.value = this.dateArr.reduce((prev, curr) => p+"/"+c)
-            this.originalInputValue = this.dateInput.value
-            console.log("onChange: " + this.dateInput.value)
+
         });
     }
 
@@ -95,7 +107,7 @@ class EthiopianCalendar extends Widget {
      * @type {string}
      */
     get displayedValue() {
-        return this.dateInput.value;
+        return this.originalInputValue;
     }
 
     update() {
@@ -104,8 +116,8 @@ class EthiopianCalendar extends Widget {
     }
 
     get value() {
-        console.log("get: "+this.dateInput.value)
-        return this.dateInput.value
+        console.log("get: "+this.originalInputValue)
+        return this.originalInputValue
     }
 
     set value(value) {
@@ -115,7 +127,7 @@ class EthiopianCalendar extends Widget {
             this.$dayInput.value = this.dateArr[0]
             this.$monthInput.value = this.dateArr[1]
             this.$yearInput.value = this.dateArr[2]
-            this.dateInput.value = value
+            this.originalInputValue = value
         }
     }
 
