@@ -29,6 +29,8 @@ class EthiopianCalendar extends Widget {
         this.$dayInput = this._createDayInput();
         this.$monthInput = this._createMonthInput();
         this.$yearInput = this._createYearInput();
+
+        this.dateArr = ['0','0','0']
         this.element.classList.add('hide');
         this.element.after( document.createRange().createContextualFragment( '<div class="ethiopian-calendar widget" style="display: flex;" />' ) );
         const widget = this.question.querySelector( '.widget' );
@@ -41,13 +43,13 @@ class EthiopianCalendar extends Widget {
         let arr = new Array(30);
         arr = Array.apply(1, arr).map((element, index) => (index+1));
         const list= this._getListHtml(arr, -1);
-        const template = this._getTemplate(list);
+        const template = this._getTemplate(list, "day");
         return template;
     }
 
     _createMonthInput(){
         const list= this._getListHtml(this.monthNames, -1);
-        const template = this._getTemplate(list);
+        const template = this._getTemplate(list, "month");
         return template;
     }
 
@@ -58,18 +60,27 @@ class EthiopianCalendar extends Widget {
             arr[i]=currentYear-i;
         }
         const list= this._getListHtml(arr, -1);
-        const template = this._getTemplate(list);
+        const template = this._getTemplate(list, "year");
         return template;
     }
 
-    _getTemplate(list){
+    _getTemplate(list, id){
         const template = document.createRange().createContextualFragment( `
-        <select class="selectpicker">
+        <select class="selectpicker" id="${id}">
             ${list}
         </select>
         `);
         // this._showSelected( template.querySelector( '.selected' ) );
+        this._addOnChangeListener(template, cls)
         return template;
+    }
+
+    _addOnChangeListener(template){
+        template.addEventListener('change', (e) => {
+            let index = {"day": 0, "month": 1, "year": 2}[template.id]
+            this.dateArr[index] = e.target.value
+            e.element.val(this.dateArr.reduce((prev, curr) => p+"/"+c))
+        });
     }
 
     _getListHtml(list){
