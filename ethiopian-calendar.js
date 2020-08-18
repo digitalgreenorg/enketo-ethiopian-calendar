@@ -82,8 +82,9 @@ class EthiopianCalendar extends Widget {
             let index = {"day": 0, "month": 1, "year": 2}[template.id]
             this.dateArr[index] = e.target.value
             this.dateInput.value = this.dateArr.reduce((prev, curr) => p+"/"+c)
+            this.originalInputValue = this.dateInput.value
+            console.log("onChange: " + this.dateInput.value)
         });
-        console.log(this.dateInput.value)
     }
 
     _getListHtml(list){
@@ -103,16 +104,19 @@ class EthiopianCalendar extends Widget {
     }
 
     get value() {
-        console.log(this.dateInput.value)
+        console.log("get: "+this.dateInput.value)
         return this.dateInput.value
     }
 
     set value(value) {
-        this.dateArr = value.split("/")
-        this.$dayInput.value = this.dateArr[0]
-        this.$monthInput.value = this.dateArr[1]
-        this.$yearInput.value = this.dateArr[2]
-        this.dateInput.value = value
+        let arr = value.split("/")
+        if(arr.length === 3){
+            this.dateArr = arr
+            this.$dayInput.value = this.dateArr[0]
+            this.$monthInput.value = this.dateArr[1]
+            this.$yearInput.value = this.dateArr[2]
+            this.dateInput.value = value
+        }
     }
 
     // _getListHtml(options, selectedIndex ) {
