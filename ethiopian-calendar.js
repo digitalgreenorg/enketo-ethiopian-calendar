@@ -42,11 +42,6 @@ class EthiopianCalendar extends Widget {
                             {this._createYearInput()}
                         </div>`
         )
-        this.$monthInput = this._createMonthInput();
-        this.$yearInput = this._createYearInput();
-        fragment.appendChild(this.$dayInput);
-        fragment.appendChild(this.$monthInput);
-        fragment.appendChild(this.$yearInput);
 
         this.element.after(fragment);
 
