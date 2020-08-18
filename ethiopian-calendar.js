@@ -71,7 +71,7 @@ class EthiopianCalendar extends Widget {
         </select>
         `);
         // this._showSelected( template.querySelector( '.selected' ) );
-        this._addOnChangeListener(template, cls)
+        this._addOnChangeListener(template)
         return template;
     }
 
