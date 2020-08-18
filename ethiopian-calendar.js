@@ -103,7 +103,7 @@ class EthiopianCalendar extends Widget {
         let index = {"day": 0, "month": 1, "year": 2}[ev.target.id]
         this.dateArr[index] = ev.target.value
         // this.dateInput.value = this.dateArr.reduce((prev, curr) => p+"/"+c)
-        this.originalInputValue = this.dateArr.reduce((prev, curr) => p+"/"+c)
+        this.originalInputValue = this.dateArr.reduce((prev, curr) => prev+"/"+curr)
         console.log("onChange: " + this.originalInputValue)
     }
 
