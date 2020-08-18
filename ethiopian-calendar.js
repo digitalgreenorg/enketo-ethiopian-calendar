@@ -30,7 +30,7 @@ class EthiopianCalendar extends Widget {
         this.$monthInput = this._createMonthInput();
         this.$yearInput = this._createYearInput();
         this.element.classList.add('hide');
-        this.element.after( document.createRange().createContextualFragment( '<div class="ethiopian-calendar widget" />' ) );
+        this.element.after( document.createRange().createContextualFragment( '<div class="ethiopian-calendar widget style=\'display: flex;\'" />' ) );
         const widget = this.question.querySelector( '.widget' );
         widget.append(this.$dayInput);
         widget.append(this.$monthInput);
