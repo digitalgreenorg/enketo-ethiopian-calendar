@@ -13,7 +13,7 @@ class EthiopianCalendar extends Widget {
      * This function is always required.
      */
     static get selector() {
-        return '.or-appearance-ethiopian-date input[type="number"]';
+        return '.or-appearance-ethiopian-date input[type="text"]';
     }
 
     /**
