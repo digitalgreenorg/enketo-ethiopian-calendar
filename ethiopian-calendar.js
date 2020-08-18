@@ -114,7 +114,7 @@ class EthiopianCalendar extends Widget {
     }
 
     _getListHtml(list){
-        return list.map(element => '<option>${element}</option>');
+        return list.map(element => `<option>${element}</option>`);
     }
 
     /**
