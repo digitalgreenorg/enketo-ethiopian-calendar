@@ -37,9 +37,9 @@ class EthiopianCalendar extends Widget {
         //Create widget's DOM function
         const fragment = document.createRange().createContextualFragment(
             `<div class="ethiopian-calendar widget" style="display: flex;" >
-                            {this._createDayInput()}
-                            {this._createMonthInput()}
-                            {this._createYearInput()}
+                            ${this._createDayInput()}
+                            ${this._createMonthInput()}
+                            ${this._createYearInput()}
                         </div>`
         )
 
