@@ -88,7 +88,7 @@ class EthiopianCalendar extends Widget {
     _getTemplate(list, id){
         const template = `
         <select class="selectpicker" id="${id}">
-            ${list}
+            ${list.reduce((a,b) => a+b)}
         </select>
         `
         // this._showSelected( template.querySelector( '.selected' ) );
@@ -100,7 +100,7 @@ class EthiopianCalendar extends Widget {
     _change( ev ) {
         console.log("onChange: start" + this.originalInputValue)
         // propagate value changes to original input and make sure a change event is fired
-        let index = {"day": 0, "month": 1, "year": 2}[template.id]
+        let index = {"day": 0, "month": 1, "year": 2}[ev.target.id]
         this.dateArr[index] = ev.target.value
         // this.dateInput.value = this.dateArr.reduce((prev, curr) => p+"/"+c)
         this.originalInputValue = this.dateArr.reduce((prev, curr) => p+"/"+c)
@@ -114,7 +114,7 @@ class EthiopianCalendar extends Widget {
     }
 
     _getListHtml(list){
-        return list.map(element => `<option>${element}</option>`);
+        return list.map(element => '<option>${element}</option>');
     }
 
     /**
