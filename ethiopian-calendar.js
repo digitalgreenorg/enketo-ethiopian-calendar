@@ -36,9 +36,12 @@ class EthiopianCalendar extends Widget {
 
         //Create widget's DOM function
         const fragment = document.createRange().createContextualFragment(
-            '<div class="ethiopian-calendar widget" style="display: flex;" />'
+            `<div class="ethiopian-calendar widget" style="display: flex;" >
+                            {this._createDayInput()}
+                            {this._createMonthInput()}
+                            {this._createYearInput()}
+                        </div>`
         )
-        this.$dayInput = this._createDayInput();
         this.$monthInput = this._createMonthInput();
         this.$yearInput = this._createYearInput();
         fragment.appendChild(this.$dayInput);
@@ -48,14 +51,17 @@ class EthiopianCalendar extends Widget {
         this.element.after(fragment);
 
         const widget = this.element.parentElement.querySelector('.widget')
+        this.$dayInput = widget.querySelector('#day')
+        this.$monthInput = widget.querySelector('#month')
+        this.$yearInput = widget.querySelector('#year')
         // this.$dayInput = this.question.querySelector( 'input' );
-        ["day","month","year"].forEach((value) => {
-            widget.querySelector('#'+value).addEventListener('change', this._change.bind(this))
-        })
+        // ["day","month","year"].forEach((value) => {
+        //     widget.querySelector('#'+value).addEventListener('change', this._change.bind(this))
+        // })
 
-        // this.$dayInput.addEventListener('change', this._change.bind(this))
-        // this.$monthInput.addEventListener('change', this._change.bind(this))
-        // this.$yearInput.addEventListener('change', this._change.bind(this))
+        this.$dayInput.addEventListener('change', this._change.bind(this))
+        this.$monthInput.addEventListener('change', this._change.bind(this))
+        this.$yearInput.addEventListener('change', this._change.bind(this))
         this.value = this.originalInputValue;
     }
 
@@ -85,11 +91,11 @@ class EthiopianCalendar extends Widget {
     }
 
     _getTemplate(list, id){
-        const template = document.createRange().createContextualFragment( `
+        const template = `
         <select class="selectpicker" id="${id}">
             ${list}
         </select>
-        `);
+        `
         // this._showSelected( template.querySelector( '.selected' ) );
         // template.addEventListener('change', this._change.bind(this))
         // this._addOnChangeListener(template)
