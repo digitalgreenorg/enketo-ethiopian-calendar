@@ -80,11 +80,13 @@ class EthiopianCalendar extends Widget {
      * @type {string}
      */
     get displayedValue() {
+        console.log(this.$dayInput.val() + "/" + this.$monthInput.val() + "/" + this.$yearInput.val())
         return this.$dayInput.val() + "/" + this.$monthInput.val() + "/" + this.$yearInput.val();
     }
 
     update() {
         super.update();
+        console.log("on Update")
     }
 
     get value() {
