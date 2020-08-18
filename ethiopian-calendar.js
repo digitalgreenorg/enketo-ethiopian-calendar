@@ -110,9 +110,9 @@ class EthiopianCalendar extends Widget {
 
     set value(value) {
         this.dateArr = value.split("/")
-        this.$dayInput.value = values[0]
-        this.$monthInput.value = values[1]
-        this.$yearInput.value = values[2]
+        this.$dayInput.value = this.dateArr[0]
+        this.$monthInput.value = this.dateArr[1]
+        this.$yearInput.value = this.dateArr[2]
         this.dateInput.value = value
     }
 
