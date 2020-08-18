@@ -76,7 +76,15 @@ class EthiopianCalendar extends Widget {
         return list.map(element => `<option>${element}</option>`);
     }
 
+    /**
+     * @type {string}
+     */
+    get displayedValue() {
+        return this.question.querySelector( '.widget input' ).value;
+    }
+
     get value() {
+        console.log(this.$dayInput.val() + "/" + this.$monthInput.val() + "/" + this.$yearInput.val())
         return this.$dayInput.val() + "/" + this.$monthInput.val() + "/" + this.$yearInput.val();
     }
 
