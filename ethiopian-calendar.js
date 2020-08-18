@@ -34,6 +34,8 @@ class EthiopianCalendar extends Widget {
         this.element.classList.add('hide');
         this.element.after( document.createRange().createContextualFragment( '<div class="ethiopian-calendar widget" style="display: flex;" />' ) );
         const widget = this.question.querySelector( '.widget' );
+        this.dateInput = widget.querySelector( 'input' );
+        this.value = this.originalInputValue;
         widget.append(this.$dayInput);
         widget.append(this.$monthInput);
         widget.append(this.$yearInput);
@@ -79,8 +81,9 @@ class EthiopianCalendar extends Widget {
         template.addEventListener('change', (e) => {
             let index = {"day": 0, "month": 1, "year": 2}[template.id]
             this.dateArr[index] = e.target.value
-            e.element.val(this.dateArr.reduce((prev, curr) => p+"/"+c))
+            this.dateInput.value = this.dateArr.reduce((prev, curr) => p+"/"+c)
         });
+        console.log(this.dateInput.value)
     }
 
     _getListHtml(list){
@@ -91,18 +94,25 @@ class EthiopianCalendar extends Widget {
      * @type {string}
      */
     get displayedValue() {
-        console.log(this.$dayInput.val() + "/" + this.$monthInput.val() + "/" + this.$yearInput.val())
-        return this.$dayInput.val() + "/" + this.$monthInput.val() + "/" + this.$yearInput.val();
+        return this.dateInput.value;
     }
 
     update() {
-        super.update();
-        console.log("on Update")
+        // super.update();
+        this.value = this.originalInputValue
     }
 
     get value() {
-        console.log(this.$dayInput.val() + "/" + this.$monthInput.val() + "/" + this.$yearInput.val())
-        return this.$dayInput.val() + "/" + this.$monthInput.val() + "/" + this.$yearInput.val();
+        console.log(this.dateInput.value)
+        return this.dateInput.value
+    }
+
+    set value(value) {
+        this.dateArr = value.split("/")
+        this.$dayInput.value = values[0]
+        this.$monthInput.value = values[1]
+        this.$yearInput.value = values[2]
+        this.dateInput.value = value
     }
 
     // _getListHtml(options, selectedIndex ) {
