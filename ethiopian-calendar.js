@@ -44,6 +44,9 @@ class EthiopianCalendar extends Widget {
         widget.append(this.$dayInput);
         widget.append(this.$monthInput);
         widget.append(this.$yearInput);
+        this.$dayInput.addEventListener('change', this._change.bind(this))
+        this.$monthInput.addEventListener('change', this._change.bind(this))
+        this.$yearInput.addEventListener('change', this._change.bind(this))
         this.value = this.originalInputValue;
     }
 
@@ -79,7 +82,7 @@ class EthiopianCalendar extends Widget {
         </select>
         `);
         // this._showSelected( template.querySelector( '.selected' ) );
-        template.addEventListener('change', this._change.bind(this))
+        // template.addEventListener('change', this._change.bind(this))
         // this._addOnChangeListener(template)
         return template;
     }
