@@ -128,6 +128,7 @@ class EthiopianCalendar extends Widget {
      * @type {string}
      */
     get displayedValue() {
+        console.log("displayedValue: "+this.originalInputValue)
         return this.originalInputValue;
     }
 
