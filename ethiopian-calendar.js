@@ -96,7 +96,7 @@ class EthiopianCalendar extends Widget {
     _getTemplate(list, id){
         const $template = $(`
         <div class="${id}">
-            <input type="text ignore hide" id="${id}">
+            <input type="text" class="ignore hide" id="${id}">
             <select class="selectpicker" id="${id}">
                 ${list.reduce((a,b) => a+b)}
             </select>
