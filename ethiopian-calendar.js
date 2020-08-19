@@ -96,6 +96,7 @@ class EthiopianCalendar extends Widget {
     _getTemplate(list, id){
         const $template = $(`
         <div class="${id}">
+            <input type="text ignore hide" id="${id}">
             <select class="selectpicker" id="${id}">
                 ${list.reduce((a,b) => a+b)}
             </select>
@@ -103,9 +104,11 @@ class EthiopianCalendar extends Widget {
         // this._showSelected( template.querySelector( '.selected' ) );
         // template.addEventListener('change', this._change.bind(this))
         // this._addOnChangeListener(template)
-        console.log($template)
-        console.log($template.find('select'))
-        return $template.find('select');
+        const $input = $template.find('input');
+        $template.find('select').on('change', (ev) => {
+            $input.trigger('change', ev)
+        });
+        return $input;
     }
 
     _change( ev ) {
