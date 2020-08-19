@@ -38,13 +38,11 @@ class EthiopianCalendar extends Widget {
 
         //Create widget's DOM function
         const fragment = document.createRange().createContextualFragment(
-            `<div class="ethiopian-calendar widget" style="display: flex;" >
-<!--                            <input class="hide ignore" type="text"/>-->
-                            ${this.$dayInput[0].closest('.day')}
-                            ${this.$monthInput[0].closest('.month')}
-                            ${this.$yearInput[0].closest('.year')}
-                        </div>`
+            `<div class="ethiopian-calendar widget" style="display: flex;" />`
         )
+        fragment.append(this.$dayInput[0].closest('.day'))
+        fragment.append(this.$monthInput[0].closest('.month'))
+        fragment.append(this.$yearInput[0].closest('.year'))
         this.element.after(fragment);
 
         const widget = this.element.parentElement.querySelector('.widget')
@@ -57,10 +55,18 @@ class EthiopianCalendar extends Widget {
         // })
 
         this.value = this.originalInputValue;
-
-        this.$dayInput.addEventListener('change', this._change.bind(this))
-        this.$monthInput.addEventListener('change', this._change.bind(this))
-        this.$yearInput.addEventListener('change', this._change.bind(this))
+        this.$dayInput.on('change', (ev) => {
+            this._change(ev)
+        });
+        this.$monthInput.on('change', (ev) => {
+            this._change(ev)
+        });
+        this.$yearInput.on('change', (ev) => {
+            this._change(ev)
+        });
+        // this.$dayInput.addEventListener('change', this._change.bind(this))
+        // this.$monthInput.addEventListener('change', this._change.bind(this))
+        // this.$yearInput.addEventListener('change', this._change.bind(this))
     }
 
     _createDayInput(){
