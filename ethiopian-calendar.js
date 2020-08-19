@@ -1,5 +1,6 @@
 import Widget from 'enketo-core/src/js/widget';
 import support from 'enketo-core/src/js/support';
+import $ from 'jquery';
 
 /**
  * Calendar widget to take ethiopian dates
@@ -88,16 +89,16 @@ class EthiopianCalendar extends Widget {
     }
 
     _getTemplate(list, id){
-        const template = `
+        const $template = $(`
         <div class="${id}">
             <select class="selectpicker" id="${id}">
                 ${list.reduce((a,b) => a+b)}
             </select>
-        </div>        `
+        </div>`)
         // this._showSelected( template.querySelector( '.selected' ) );
         // template.addEventListener('change', this._change.bind(this))
         // this._addOnChangeListener(template)
-        return template.find('select');
+        return $template.find('.selectpicker');
     }
 
     _change( ev ) {
