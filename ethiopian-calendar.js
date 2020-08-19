@@ -106,7 +106,7 @@ class EthiopianCalendar extends Widget {
         // this._addOnChangeListener(template)
         const $input = $template.find('input');
         $template.find('select').on('change', (ev) => {
-            $input.trigger('change', ev)
+            $input.val(ev.target.value).trigger('change')
         });
         return $input;
     }
