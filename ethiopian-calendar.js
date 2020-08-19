@@ -150,6 +150,10 @@ class EthiopianCalendar extends Widget {
         }
     }
 
+    static get list() {
+        return true;
+    }
+
     // _getListHtml(options, selectedIndex ) {
     //     const inputAttr = `type="radio" name="${Math.random() * 100000}"`;
     //     return options
