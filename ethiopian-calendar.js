@@ -48,9 +48,9 @@ class EthiopianCalendar extends Widget {
         this.element.after(fragment);
 
         const widget = this.element.parentElement.querySelector('.widget')
-        this.$dayInput = widget.querySelector('#day')
-        this.$monthInput = widget.querySelector('#month')
-        this.$yearInput = widget.querySelector('#year')
+        // this.$dayInput = widget.querySelector('#day')
+        // this.$monthInput = widget.querySelector('#month')
+        // this.$yearInput = widget.querySelector('#year')
         // this.$dayInput = this.question.querySelector( 'input' );
         // ["day","month","year"].forEach((value) => {
         //     widget.querySelector('#'+value).addEventListener('change', this._change.bind(this))
