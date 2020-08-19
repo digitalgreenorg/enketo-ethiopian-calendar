@@ -40,12 +40,11 @@ class EthiopianCalendar extends Widget {
         const fragment = document.createRange().createContextualFragment(
             `<div class="ethiopian-calendar widget" style="display: flex;" />`
         )
-        fragment.append(this.$dayInput[0].closest('.day'))
-        fragment.append(this.$monthInput[0].closest('.month'))
-        fragment.append(this.$yearInput[0].closest('.year'))
         this.element.after(fragment);
-
-        const widget = this.element.parentElement.querySelector('.widget')
+        const widget = this.question.querySelector('.widget')
+        widget.append(this.$dayInput[0].closest('.day'))
+        widget.append(this.$monthInput[0].closest('.month'))
+        widget.append(this.$yearInput[0].closest('.year'))
         // this.$dayInput = widget.querySelector('#day')
         // this.$monthInput = widget.querySelector('#month')
         // this.$yearInput = widget.querySelector('#year')
