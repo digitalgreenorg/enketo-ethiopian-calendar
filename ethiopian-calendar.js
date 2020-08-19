@@ -30,16 +30,20 @@ class EthiopianCalendar extends Widget {
 
         this.element.classList.add('hide');
 
+
+        this.$dayInput = this._createDayInput()
+        this.$monthInput = this._createMonthInput()
+        this.$yearInput = this._createYearInput()
+
         //Create widget's DOM function
         const fragment = document.createRange().createContextualFragment(
             `<div class="ethiopian-calendar widget" style="display: flex;" >
-                            <input class="hide ignore" type="text"/>
-                            ${this._createDayInput()}
-                            ${this._createMonthInput()}
-                            ${this._createYearInput()}
+<!--                            <input class="hide ignore" type="text"/>-->
+                            ${this.$dayInput[0].closest('.day')}
+                            ${this.$monthInput[0].closest('.month')}
+                            ${this.$yearInput[0].closest('.year')}
                         </div>`
         )
-
         this.element.after(fragment);
 
         const widget = this.element.parentElement.querySelector('.widget')
@@ -85,14 +89,15 @@ class EthiopianCalendar extends Widget {
 
     _getTemplate(list, id){
         const template = `
-        <select class="selectpicker" id="${id}">
-            ${list.reduce((a,b) => a+b)}
-        </select>
-        `
+        <div class="${id}">
+            <select class="selectpicker" id="${id}">
+                ${list.reduce((a,b) => a+b)}
+            </select>
+        </div>        `
         // this._showSelected( template.querySelector( '.selected' ) );
         // template.addEventListener('change', this._change.bind(this))
         // this._addOnChangeListener(template)
-        return template;
+        return template.find('select');
     }
 
     _change( ev ) {
@@ -100,8 +105,7 @@ class EthiopianCalendar extends Widget {
         let index = {"day": 0, "month": 1, "year": 2}[ev.target.id]
         this.dateArr[index] = ev.target.value
         // this.dateInput.value = this.dateArr.reduce((prev, curr) => p+"/"+c)
-        // this.originalInputValue = this.dateArr.reduce((prev, curr) => prev+"/"+curr)
-        this.originalInputValue = 'testindex'
+        this.originalInputValue = this.value
         console.log("onChange: " + this.originalInputValue)
     }
 
@@ -123,7 +127,7 @@ class EthiopianCalendar extends Widget {
 
     get value() {
         console.log("get: "+this.originalInputValue)
-        return this.originalInputValue
+        return this.dateArr.reduce((prev, curr) => prev+"/"+curr)
     }
 
     set value(value) {
