@@ -184,7 +184,7 @@ class EthiopianCalendar extends Widget {
                         li.classList.add( 'active' );
                         option.selected = true;
                         input.checked = true;
-                        oInput.value(option.textContent)
+                        oInput.value = option.textContent
                     }
 
                     const showSelectedEl = _this.picker.querySelector( '.selected' );
