@@ -191,7 +191,9 @@ class EthiopianCalendar extends Widget {
         }[picker.id]
         this.values[index] = value
         console.log(this.values)
-        return toGregorian(this.values[2], this.values[1], this.values[0])
+        console.log(this.values[2], this.values[1], this.values[0])
+        console.log(toGregorian(this.values[2], this.values[1], this.values[0]).join('-'))
+        return toGregorian(this.values[2], this.values[1], this.values[0]).join('-')
     }
 
     /**
