@@ -86,7 +86,7 @@ class EthiopianCalendar extends Widget {
     }
 
     getMonthOptions(){
-        let options = range.createContextualFragment(this.monthNames.map(op => `<option value="${op}">${op}</option>`).join(''))
+        let options = range.createContextualFragment(this.monthNames.map((op, index) => `<option value="${index+1}">${op}</option>`).join(''))
         return options
     }
 
@@ -205,7 +205,7 @@ class EthiopianCalendar extends Widget {
                 const input = li.querySelector( 'input' );
                 const oInput = _this.element;
                 const option = _this._getOptionFromPicker(picker.id).querySelector( `option[value="${input.value}"]` );
-                const selectedBefore = option.matches( ':checked' );
+                // const selectedBefore = option.matches( ':checked' );
 
                 // We need to prevent default unless click was on an input
                 // Without this 'fix', clicks on radiobuttons/checkboxes themselves will update the value
@@ -226,17 +226,17 @@ class EthiopianCalendar extends Widget {
                 // It has to do with event propagation. I could not figure out how to fix it.
                 // Therefore I used a workaround by slightly delaying the status changes.
                 setTimeout( () => {
-                    if ( selectedBefore ) {
-                        li.classList.remove( 'active' );
-                        input.checked = false;
-                        option.selected = false;
-                        oInput.value = ''
-                    } else {
+                    // if ( selectedBefore ) {
+                    //     li.classList.remove( 'active' );
+                    //     input.checked = false;
+                    //     option.selected = false;
+                    //     oInput.value = ''
+                    // } else {
                         li.classList.add( 'active' );
                         option.selected = true;
                         input.checked = true;
-                        oInput.value = _this._getValueFrom(picker, option.textContent)
-                    }
+                        oInput.value = _this._getValueFrom(picker, option.value)
+                    // }
 
                     const showSelectedEl = picker.querySelector( '.selected' );
                     _this._showSelected( showSelectedEl, picker.id );
