@@ -53,7 +53,7 @@ class EthiopianCalendar extends Widget {
      */
     _getTemplate() {
         const template = range.createContextualFragment( `
-        <div class="btn-group ethiopian-date widget clearfix">
+        <div class="btn-group ethiopian-date bootstrap-select widget clearfix">
             <button type="button" class="btn btn-default dropdown-toggle clearfix" data-toggle="dropdown">
                 <span class="selected"></span><span class="caret"></span>
             </button>
