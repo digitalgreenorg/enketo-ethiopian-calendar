@@ -67,7 +67,7 @@ class EthiopianCalendar extends Widget {
     getOptions(){
         let arr = new Array(30);
         arr = Array.apply(1, arr).map((element, index) => (index+1));
-        let options = range.createContextualFragment(arr.map(op => `<option>${op}</option>`).join(''))
+        let options = range.createContextualFragment(arr.map(op => `<option value="${op}">${op}</option>`).join(''))
         return options
     }
 
@@ -155,7 +155,7 @@ class EthiopianCalendar extends Widget {
                 const input = li.querySelector( 'input' );
                 const oInput = _this.element;
                 const option = _this.$dayOptions.querySelector( `option[value="${input.value}"]` );
-                const selectedBefore = option.matches( ':checked' );
+                const selectedBefore = opt\ion.matches( ':checked' );
 
                 // We need to prevent default unless click was on an input
                 // Without this 'fix', clicks on radiobuttons/checkboxes themselves will update the value
