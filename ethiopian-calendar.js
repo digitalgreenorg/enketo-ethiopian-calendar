@@ -193,7 +193,8 @@ class EthiopianCalendar extends Widget {
         console.log(this.values)
         console.log(this.values[2], this.values[1], this.values[0])
         console.log(toGregorian(this.values[2], this.values[1], this.values[0]).join('-'))
-        return toGregorian(this.values[2], this.values[1], this.values[0]).join('-')
+        console.log(toGregorian(parseInt(this.values[2]), parseInt(this.values[1]), parseInt(this.values[0])).join('-'))
+        return toGregorian(parseInt(this.values[2]), parseInt(this.values[1]), parseInt(this.values[0])).join('-')
     }
 
     /**
