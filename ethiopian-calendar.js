@@ -41,20 +41,24 @@ class EthiopianCalendar extends Widget {
             'Megabit', 'Miazia', 'Genbot', 'Sene', 'Hamle', 'Nehase', 'Pagume'];
         this.$dayOptions = this.getDayOptions()
         this.$monthOptions = this.getMonthOptions()
-        // this.$dayOptions = this.getOptions()
+        this.$yearOptions = this.getYearOptions()
         input.style.display = 'none';
         const dayTemplate = this._getTemplate(this.$dayOptions, "day_input");
         const monthTemplate = this._getTemplate(this.$monthOptions, "month_input");
-        input.after( dayTemplate );
+        const yearTemplate = this._getTemplate(this.$monthOptions, "year_input");
+        input.after(yearTemplate);
         input.after( monthTemplate );
+        input.after( dayTemplate );
         this.values = ['0','0','0']
         this.dayPicker = this.question.querySelector( '#day_input' );
         this.monthPicker = this.question.querySelector( '#month_input' );
+        this.yearPicker = this.question.querySelector( '#year_input' );
         if ( this.props.readonly ) {
             this.disable();
         }
         this._clickListener(this.dayPicker);
         this._clickListener(this.monthPicker);
+        this._clickListener(this.yearPicker);
         this._focusListener();
     }
 
@@ -83,6 +87,17 @@ class EthiopianCalendar extends Widget {
 
     getMonthOptions(){
         let options = range.createContextualFragment(this.monthNames.map(op => `<option value="${op}">${op}</option>`).join(''))
+        return options
+    }
+
+    getYearOptions(){
+        const now = new Date()
+        const currentYear = toEthiopian(now.getFullYear(), now.getMonth(), now.getDate())[0];
+        let arr = new Array(100);
+        for(let i=99; i>=0; i--){
+            arr[i]=currentYear-i;
+        }
+        let options = range.createContextualFragment(arr.map(op => `<option value="${op}">${op}</option>`).join(''))
         return options
     }
 
@@ -162,14 +177,17 @@ class EthiopianCalendar extends Widget {
     _getOptionFromPicker(input_id){
         if(input_id === "day_input"){
             return this.$dayOptions
-        } else
+        } else if(input_id === "month_input")
             return this.$monthOptions
+        else
+            return this.$yearOptions
     }
 
     _getValueFrom(picker, value){
         const index = {
             "day_input": 0,
-            "month_input": 1
+            "month_input": 1,
+            "year_input": 2
         }[picker.id]
         this.values[index] = value
         return this.values.join("-")
@@ -221,7 +239,7 @@ class EthiopianCalendar extends Widget {
                     }
 
                     const showSelectedEl = picker.querySelector( '.selected' );
-                    _this._showSelected( showSelectedEl );
+                    _this._showSelected( showSelectedEl, picker.id );
 
                     oInput.dispatchEvent( new event.Change() );
                 }, 10 );
@@ -284,6 +302,13 @@ class EthiopianCalendar extends Widget {
             input.disabled = true;
             input.readOnly = true;
         } );
+        this.yearPicker.querySelectorAll( 'li' ).forEach( el => {
+            el.classList.add( 'disabled' );
+            const input = el.querySelector( 'input' );
+            // are both below necessary?
+            input.disabled = true;
+            input.readOnly = true;
+        } );
     }
 
     /**
@@ -302,6 +327,12 @@ class EthiopianCalendar extends Widget {
             input.disabled = false;
             input.readOnly = false;
         } );
+        this.yearPicker.querySelectorAll( 'li' ).forEach( el => {
+            el.classList.remove( 'disabled' );
+            const input = el.querySelector( 'input' );
+            input.disabled = false;
+            input.readOnly = false;
+        } );
     }
 
     /**
@@ -310,6 +341,7 @@ class EthiopianCalendar extends Widget {
     update() {
         this.dayPicker.remove();
         this.monthPicker.remove();
+        this.yearPicker.remove();
         this._init();
     }
 }
