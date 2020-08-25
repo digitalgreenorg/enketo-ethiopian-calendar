@@ -154,7 +154,7 @@ class EthiopianCalendar extends Widget {
                 const li = this;
                 const input = li.querySelector( 'input' );
                 const oInput = _this.element;
-                const option = _this.$dayInput.querySelector( `option[value="${input.value}"]` );
+                const option = _this.$dayOptions.querySelector( `option[value="${input.value}"]` );
                 const selectedBefore = option.matches( ':checked' );
 
                 // We need to prevent default unless click was on an input
