@@ -45,7 +45,7 @@ class EthiopianCalendar extends Widget {
         input.style.display = 'none';
         const dayTemplate = this._getTemplate(this.$dayOptions, "day_input");
         const monthTemplate = this._getTemplate(this.$monthOptions, "month_input");
-        const yearTemplate = this._getTemplate(this.$monthOptions, "year_input");
+        const yearTemplate = this._getTemplate(this.$yearOptions, "year_input");
         input.after(yearTemplate);
         input.after( monthTemplate );
         input.after( dayTemplate );
