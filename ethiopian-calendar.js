@@ -155,7 +155,7 @@ class EthiopianCalendar extends Widget {
                 const input = li.querySelector( 'input' );
                 const oInput = _this.element;
                 const option = _this.$dayOptions.querySelector( `option[value="${input.value}"]` );
-                const selectedBefore = opt\ion.matches( ':checked' );
+                const selectedBefore = option.matches( ':checked' );
 
                 // We need to prevent default unless click was on an input
                 // Without this 'fix', clicks on radiobuttons/checkboxes themselves will update the value
