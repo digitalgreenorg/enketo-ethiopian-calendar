@@ -5,6 +5,7 @@ import event from "enketo-core/src/js/event";
 import {getSiblingElementsAndSelf} from "enketo-core/src/js/dom-utils";
 import events from "enketo-core/src/js/event";
 import { t } from 'enketo/translator';
+import input from "enketo-core/src/js/input";
 
 
 const range = document.createRange();
@@ -36,48 +37,62 @@ class EthiopianCalendar extends Widget {
 
     _init() {
         const input =  this.element;
-        this.$dayOptions = this.getOptions()
+        this.monthNames = ['Meskerem', 'Tikemet', 'Hidar', 'Tahesas', 'Tir', 'Yekatit',
+            'Megabit', 'Miazia', 'Genbot', 'Sene', 'Hamle', 'Nehase', 'Pagume'];
+        this.$dayOptions = this.getDayOptions()
+        this.$monthOptions = this.getMonthOptions()
+        // this.$dayOptions = this.getOptions()
         input.style.display = 'none';
-        const template = this._getTemplate();
-        input.after( template );
-        this.picker = this.question.querySelector( '.ethiopian-date' );
+        const dayTemplate = this._getTemplate(this.$dayOptions, "day_input");
+        const monthTemplate = this._getTemplate(this.$monthOptions, "month_input");
+        input.after( dayTemplate );
+        input.after( monthTemplate );
+        this.values = ['0','0','0']
+        this.dayPicker = this.question.querySelector( '#day_input' );
+        this.monthPicker = this.question.querySelector( '#month_input' );
         if ( this.props.readonly ) {
             this.disable();
         }
-        this._clickListener();
+        this._clickListener(this.dayPicker);
+        this._clickListener(this.monthPicker);
         this._focusListener();
     }
 
     /**
      * @return {Element} HTML fragment
      */
-    _getTemplate() {
+    _getTemplate(options, input_id) {
         const template = range.createContextualFragment( `
-        <div class="btn-group ethiopian-date bootstrap-select widget clearfix">
+        <div id="${input_id}" class="btn-group ethiopian-date bootstrap-select widget clearfix">
             <button type="button" class="btn btn-default dropdown-toggle clearfix" data-toggle="dropdown">
                 <span class="selected"></span><span class="caret"></span>
             </button>
-            <ul class="dropdown-menu" role="menu">${this._getLisHtml()}</ul>
+            <ul class="dropdown-menu" role="menu">${this._getLisHtml(options)}</ul>
         </div>` );
-        this._showSelected( template.querySelector( '.selected' ) );
+        this._showSelected( template.querySelector( '.selected' ), input_id );
 
         return template;
     }
 
-    getOptions(){
+    getDayOptions(){
         let arr = new Array(30);
         arr = Array.apply(1, arr).map((element, index) => (index+1));
         let options = range.createContextualFragment(arr.map(op => `<option value="${op}">${op}</option>`).join(''))
         return options
     }
 
+    getMonthOptions(){
+        let options = range.createContextualFragment(this.monthNames.map(op => `<option value="${op}">${op}</option>`).join(''))
+        return options
+    }
+
     /**
      * Generates HTML text for <li> elements
      */
-    _getLisHtml( ) {
+    _getLisHtml(options) {
         const inputAttr = `type="radio" name="${Math.random() * 100000}"`
 
-        return [ ...this.$dayOptions.querySelectorAll('option') ]
+        return [ ...options.querySelectorAll('option') ]
             .map( option => {
                 const label = option.textContent;
                 const selected = option.matches( ':checked' );
@@ -115,9 +130,10 @@ class EthiopianCalendar extends Widget {
      * Update text to show in closed picker
      *
      * @param {Element} el - HTML element to show text in
+     * @param {String} input_id - ID of the input calling this selector
      */
-    _showSelected( el ) {
-        const selectedLabels = [ ...this.$dayOptions.querySelectorAll( 'option:checked' ) ]
+    _showSelected( el, input_id) {
+        const selectedLabels = [ ...this._getOptionFromPicker(input_id).querySelectorAll( 'option:checked' ) ]
             .filter( option =>  option.getAttribute( 'value' ).length )
             .map( option => option.textContent );
 
@@ -143,18 +159,34 @@ class EthiopianCalendar extends Widget {
         }
     }
 
+    _getOptionFromPicker(input_id){
+        if(input_id === "day_input"){
+            return this.$dayOptions
+        } else
+            return this.$monthOptions
+    }
+
+    _getValueFrom(picker, value){
+        const index = {
+            "day_input": 0,
+            "month_input": 1
+        }[picker.id]
+        this.values[index] = value
+        return this.values.join("-")
+    }
+
     /**
      * Handles click listener
      */
-    _clickListener() {
+    _clickListener(picker) {
         const _this = this;
 
-        $( this.picker )
+        $(picker)
             .on( 'click', 'li:not(.disabled)', function( e ) {
                 const li = this;
                 const input = li.querySelector( 'input' );
                 const oInput = _this.element;
-                const option = _this.$dayOptions.querySelector( `option[value="${input.value}"]` );
+                const option = _this._getOptionFromPicker(picker.id).querySelector( `option[value="${input.value}"]` );
                 const selectedBefore = option.matches( ':checked' );
 
                 // We need to prevent default unless click was on an input
@@ -164,9 +196,9 @@ class EthiopianCalendar extends Widget {
                     e.preventDefault();
                 }
 
-                _this.picker.querySelectorAll( 'li' ).forEach( li=> li.classList.remove( 'active' ) );
+                picker.querySelectorAll( 'li' ).forEach( li=> li.classList.remove( 'active' ) );
                 getSiblingElementsAndSelf( option, 'option' ).forEach( option => { option.selected = false; } );
-                _this.picker.querySelectorAll( 'input' ).forEach( input  => input.checked = false );
+                picker.querySelectorAll( 'input' ).forEach( input  => input.checked = false );
 
                 // For issue https://github.com/kobotoolbox/enketo-express/issues/1122 in FF,
                 // we had to use event.preventDefault() on <a> tag click events.
@@ -185,10 +217,10 @@ class EthiopianCalendar extends Widget {
                         li.classList.add( 'active' );
                         option.selected = true;
                         input.checked = true;
-                        oInput.value = option.textContent
+                        oInput.value = _this._getValueFrom(picker, option.textContent)
                     }
 
-                    const showSelectedEl = _this.picker.querySelector( '.selected' );
+                    const showSelectedEl = picker.querySelector( '.selected' );
                     _this._showSelected( showSelectedEl );
 
                     oInput.dispatchEvent( new event.Change() );
@@ -230,7 +262,7 @@ class EthiopianCalendar extends Widget {
 
         // Focus on original element (form.goTo functionality)
         this.element.addEventListener( events.ApplyFocus().type, () => {
-            _this.picker.querySelector( '.dropdown-toggle' ).focus();
+            _this.dayPicker.querySelector( '.dropdown-toggle' ).focus();
         } );
     }
 
@@ -238,7 +270,14 @@ class EthiopianCalendar extends Widget {
      * Disables widget
      */
     disable() {
-        this.picker.querySelectorAll( 'li' ).forEach( el => {
+        this.dayPicker.querySelectorAll( 'li' ).forEach( el => {
+            el.classList.add( 'disabled' );
+            const input = el.querySelector( 'input' );
+            // are both below necessary?
+            input.disabled = true;
+            input.readOnly = true;
+        } );
+        this.monthPicker.querySelectorAll( 'li' ).forEach( el => {
             el.classList.add( 'disabled' );
             const input = el.querySelector( 'input' );
             // are both below necessary?
@@ -251,7 +290,13 @@ class EthiopianCalendar extends Widget {
      * Enables widget
      */
     enable() {
-        this.picker.querySelectorAll( 'li' ).forEach( el => {
+        this.dayPicker.querySelectorAll( 'li' ).forEach( el => {
+            el.classList.remove( 'disabled' );
+            const input = el.querySelector( 'input' );
+            input.disabled = false;
+            input.readOnly = false;
+        } );
+        this.monthPicker.querySelectorAll( 'li' ).forEach( el => {
             el.classList.remove( 'disabled' );
             const input = el.querySelector( 'input' );
             input.disabled = false;
@@ -263,7 +308,8 @@ class EthiopianCalendar extends Widget {
      * Updates widget
      */
     update() {
-        this.picker.remove();
+        this.dayPicker.remove();
+        this.monthPicker.remove();
         this._init();
     }
 }
