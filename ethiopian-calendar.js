@@ -75,7 +75,7 @@ class EthiopianCalendar extends Widget {
      * Generates HTML text for <li> elements
      */
     _getLisHtml( ) {
-        const inputAttr = 'type="checkbox"'
+        const inputAttr = `type="radio" name="${Math.random() * 100000}"`
 
         return [ ...this.$dayOptions.querySelectorAll('option') ]
             .map( option => {
