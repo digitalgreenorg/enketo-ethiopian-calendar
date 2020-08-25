@@ -180,6 +180,7 @@ class EthiopianCalendar extends Widget {
                         li.classList.remove( 'active' );
                         input.checked = false;
                         option.selected = false;
+                        oInput.value = ''
                     } else {
                         li.classList.add( 'active' );
                         option.selected = true;
