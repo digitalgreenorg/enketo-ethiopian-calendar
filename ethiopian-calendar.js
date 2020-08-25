@@ -190,7 +190,7 @@ class EthiopianCalendar extends Widget {
             "year_input": 2
         }[picker.id]
         this.values[index] = value
-        return this.values.join("-")
+        return toGregorian(this.values[2], this.values[1], this.values[0])
     }
 
     /**
